@@ -1,0 +1,31 @@
+[Unit]
+Description=Presence Guard Face Recognition Security
+After=graphical-session.target
+Wants=graphical-session.target
+
+[Service]
+Type=simple
+User=%i
+Environment="DISPLAY=:0"
+Environment="XAUTHORITY=/home/%i/.Xauthority"
+ExecStart=/usr/bin/python3 /home/%i/.local/bin/presence_guard.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/%i/.face_enroll /home/%i/presence_guard.log
+
+# Allow access to camera devices
+DeviceAllow=/dev/video0 rw
+DeviceAllow=/dev/video1 rw
+DeviceAllow=/dev/video2 rw
+DeviceAllow=/dev/video3 rw
+
+[Install]
+WantedBy=default.target

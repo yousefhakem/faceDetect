@@ -14,7 +14,7 @@ import face_recognition
 
 # ===== CONFIG (tune as needed) =====
 ENROLL_DIR = os.path.expanduser("~/.face_enroll")
-ALLOWED_TOLERANCE = 0.45      # lower = stricter match
+ALLOWED_TOLERANCE = 0.65      # lower = stricter match
 CHECK_INTERVAL = 0.35         # seconds between checks (fast)
 LOCK_COOLDOWN = 4             # seconds to wait after locking before re-checking
 ABSENCE_TIMEOUT = 6           # if 0 faces for this long -> lock (seconds)
@@ -26,7 +26,7 @@ FRAME_WIDTH = 640             # 640x480 is a good speed/accuracy balance
 FRAME_HEIGHT = 480
 HOG_UPSAMPLE = 1              # 0..2 ; higher = more recall, slower
 USE_CNN_FALLBACK = True       # try 'cnn' first if HOG finds nothing (slower but robust)
-ENCODING_EVERY_N = 5          # run face-ID every N frames (speed boost)
+ENCODING_EVERY_N = 1          # run face-ID every N frames (speed boost)
 LOGFILE = os.path.expanduser("~/presence_guard.log")
 # ===================================
 
@@ -164,7 +164,7 @@ def main():
                 continue
 
             rgb = frame[:, :, ::-1]  # BGR -> RGB (no downscale; already 640x480)
-
+            rgb = cv2.cvtColor(rgb, cv2.COLOR_BGR2RGB)
             # Fast face count
             face_locations = detect_faces_rgb(rgb)
             n_faces = len(face_locations)
